@@ -15,13 +15,16 @@ class DictionaryParser:
 
   def load_words(self):
     for file in self.input_files:
-      current_file = open(file, "r")
-      words = current_file.read().split()
+
+      with open(file, encoding="utf8", errors='ignore') as f:
+        words = f.read().split()
+
+
       for word in words:
         if len(word) < 6 and all(char.isalpha() for char in word):
           self.all_passwords.append(word)
-      
-      current_file.close()
+
+      f.close()
 
   def write_words(self):
     output_file = open(self.output_file, "a")

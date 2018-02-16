@@ -8,13 +8,13 @@ class Cracker():
     ALPHABET = string.ascii_letters
     ALPHA_LENGTH = len(ALPHABET)
     SALT = str(50)
-    
+
     def __init__(self, hashed_pass):
         self.hashed_pass = hashed_pass
 
     def hash_the_salt(self, word):
         crypt
-    
+
     def brute_force(self):
         word = ""
         for i in range(self.ALPHA_LENGTH):
@@ -31,9 +31,9 @@ class Cracker():
           word = word[:3] + self.ALPHABET[i]
         print("Brute force failed")
         return 1
-    
+
     def load_dictionary(self):
-      input_file = open("my_passwords.txt", 'r')
+      input_file = open("mega_passwords.txt", 'r')
       self.all_passwords = input_file.read().split()
 
     def dictionary_attack(self):

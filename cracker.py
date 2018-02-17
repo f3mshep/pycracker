@@ -5,12 +5,14 @@ import string
 # crypt usage: crypt.crypt(key, salt)
 
 class Cracker():
-    ALPHABET = string.ascii_letters
+    ALPHABET = 'aeorisntlmdcphbukgyfwjvzxqASERBTMLNPOIDCHGKFJUWQVXYZ'
     ALPHA_LENGTH = len(ALPHABET)
-    SALT = str(50)
 
     def __init__(self, hashed_pass):
         self.hashed_pass = hashed_pass
+        self.salt = hashed_pass[:2:]
+        print("Salt:")
+        print(self.salt)
 
     def hash_the_salt(self, word):
         crypt
@@ -21,14 +23,16 @@ class Cracker():
           for j in range(self.ALPHA_LENGTH):
             for k in range(self.ALPHA_LENGTH):
               for l in range(self.ALPHA_LENGTH):
-                if crypt.crypt(str(word), self.SALT) == self.hashed_pass:
-                  print("Match Found:")
-                  print(word)
-                  return 0
-                word = self.ALPHABET[l] + word[1:]
-              word = word[:1] + self.ALPHABET[k] + word[2:]
-            word = word[:2] + self.ALPHABET[j] + word[3:]
-          word = word[:3] + self.ALPHABET[i]
+                for m in range(self.ALPHA_LENGTH):
+                  if crypt.crypt(str(word), self.salt) == self.hashed_pass:
+                    print("Match Found:")
+                    print(word)
+                    return 0
+                  word = self.ALPHABET[m] + word[1:]
+                word = word[:1] + self.ALPHABET[l] + word[2:]
+              word = word[:2] + self.ALPHABET[k] + word[3:]
+            word = word[:3] + self.ALPHABET[j] + word[4:]
+          word = word[:4] + self.ALPHABET[i]
         print("Brute force failed")
         return 1
 
@@ -38,7 +42,7 @@ class Cracker():
 
     def dictionary_attack(self):
       for word in self.all_passwords:
-        if crypt.crypt(word, self.SALT) == self.hashed_pass or crypt.crypt(word.upper(), self.SALT) == self.hashed_pass:
+        if crypt.crypt(word, self.salt) == self.hashed_pass:
           print("Match Found:")
           print(word)
           return 0
@@ -51,11 +55,13 @@ def main():
     return 0
   hash = sys.argv[1]
   cracker = Cracker(hash)
-  print("Initiating brute force sequence")
-  results = cracker.brute_force()
+  print("Throwing the book at em'")
+  cracker.load_dictionary()
+  results = cracker.dictionary_attack()
   if results == 1:
-    cracker.load_dictionary()
-    cracker.dictionary_attack()
+    print("Initiating brute force sequence")
+    cracker.brute_force()
+  return 0
 
 if __name__ == "__main__":
     main()
